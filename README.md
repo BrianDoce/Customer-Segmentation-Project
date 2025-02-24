@@ -61,17 +61,17 @@ Next, I wanted to see the amount that customers bought from each category and th
 
 Here is the amount bought for each category:
 
-![Amount Bought For Each Category](image.png)
+![Amount Bought For Each Category](./assets/image.png)
 
 Here is the amount of customers that use each payment method:
-![Amount Used For Each Payment Method](image.png)
+![Amount Used For Each Payment Method](./assets/image13.png)
 
 Continuing with my analysis, I thought that it would be useful to use the purchase date of customers to see the season each customer bought their item. This provides us with insight on what seasons are popular amongst customers.
-![Count of Seasons](image-1.png)
+![Count of Seasons](./assets/image-1.png)
 We can see based on this visualization that the warmer seasons (Spring and Summer) are more popular 
 
 Finally, I wanted to see how age correleated with how much a customer purchased in a single transaction.
-![Age vs. Transaction](image-2.png)
+![Age vs. Transaction](./assets/image-2.png)
 
 Here we can see that there is a positive correlation between age and amount purchased in a single transaction.
 
@@ -94,11 +94,11 @@ I then used regular expressions and a function to map labels accordingly onto cu
 
 Here is the final result:
 
-![Count of Labeled Customers](image-3.png)
+![Count of Labeled Customers](./assets/image-3.png)
 
 Here is the result as a pie chart:
 
-![Pie Chart](image-4.png)
+![Pie Chart](./assets/image-4.png)
 
 # Feature Engineering
 For more useful and insightful clusters, I did more feature engineering.
@@ -144,14 +144,14 @@ Here is what my dataframe looked like after identifying the outliers:
 
 After running the algorithm this is the percentage of inliers / outliers within my data:
 
-![percentage of inliers / outliers](image-5.png)
+![percentage of inliers / outliers](./assets/image-5.png)
 
 After identifying the outliers, I dropped them from my dataframe.
 
 # Determining Multicollinearity 
 To determine multicollinearity I created a heat map:
 
-![correlation matrix](image-6.png)
+![correlation matrix](./assets/image-6.png)
 
 From the heat map it is important to note some features that are highly correlated with each other:
 - Total_Transactions and Total_Purchase_Amount
@@ -163,14 +163,14 @@ Multicollinearity is important for our clusters because if there is multicolline
 # Finding Optimal Components for PCA 
  Since we identified multicollinearity within our data we can use PCA it helps reduce the effect of multicollinearity by tranforming the data into uncorrelated data.
 
- ![PCA visualization](image-7.png)
+ ![PCA visualization](./assets/image-7.png)
 
  Here we can see the graph of the explained variance which shows how much of the variance is obtained by each principal component. I chose 7 as the number of components as this is the point where the cumulative variance slows down.
 
  # Utilizing PCA
  After running PCA with 7 components this is the result:
 
- ![PCA Results](image-8.png)
+ ![PCA Results](./assets/image-8.png)
 
  The highlighted cells are the coefficients that correspond to each principal component.
 
@@ -179,7 +179,7 @@ Multicollinearity is important for our clusters because if there is multicolline
  ## Elbow Method
  The Elbow Method is a technique used to find the optimal number of clusters by generating clusters for different values of k and calculating the sum of squared difference of each point and the closest centroid. If we plot the sum of squared differences we can identify the point where adding more clusters does not significantly reduce the sum of squared difference, creating an "elbow". However, the downside of this method is that the "elbow" is usually vague and hard to identify.
 
- ![elbow method](image-9.png)
+ ![elbow method](./assets/image-9.png)
 
  ## Utilizing the Silhouette Method
  The silhouette method is another technique used to find the optimal number of clusters in a dataset. This method calculates a silhouette score for each data point that measure how well each point is assigned to a cluster.
@@ -190,7 +190,7 @@ Multicollinearity is important for our clusters because if there is multicolline
  
  Here is the final result:
 
- ![silhouette method](image-10.png)
+ ![silhouette method](./assets/image-10.png)
 
  ## Interpreting the Silhouette Visualization
  To determine the most optimal amount of clusters I looked at the number of clusters with the highest mean silhouette score and looking at the silhouette plots that are roughly the same thickness and width.  
@@ -198,7 +198,7 @@ Multicollinearity is important for our clusters because if there is multicolline
  # Creating the Clusters
  After performing clustering, here is the result of the distribution of the customers amongst the clusters.
 
- ![cluster distribution](image-11.png)
+ ![cluster distribution](./assets/image-11.png)
 
  ## Evaluating Cluster Quality
  To evaluate my clusters I'm going to use the Silhouette Score (higher values indicate better clustering), Calinski Harabasz Score (high score indicates better clustering), and Davies Bouldin Score (lower value indicates better clustering).
@@ -219,7 +219,7 @@ From my evaluation we can see that my silhouette score is 0.20, which is not ide
 # Clusters
 Here are my resulting clusters:
 
-![clusters](image-12.png)
+![clusters](./assets/image-12.png)
 
 ## Cluster Interpretation
 Cluster 0: Customers in cluster 0 are usually males whose favorite shopping category are usually electronics or clothing.
