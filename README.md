@@ -32,9 +32,6 @@ Since this dataset was artificially generated, there wasn't much needed to do fo
 3. I dropped Customer_Name and Age columns.
     - I thought the Customer_Name was not valuable and I would have done this for privacy concerns. The Age column was repeated, so I dropped it.
 
-4. I used the Purchase_Date column to create a new column (Season) that represented the season a customer made their purchase.
-    - I thought that 
-
 The final dataframe has 250,000 rows and 13 columns.
 (Note: the following visualization is a portion of the columns)
 
@@ -71,6 +68,7 @@ Here is the amount of customers that use each payment method:
 
 Continuing with my analysis, I thought that it would be useful to use the purchase date of customers to see the season each customer bought their item. This provides us with insight on what seasons are popular amongst customers.
 ![Count of Seasons](image-1.png)
+We can see based on this visualization that the warmer seasons (Spring and Summer) are more popular 
 
 Finally, I wanted to see how age correleated with how much a customer purchased in a single transaction.
 ![Age vs. Transaction](image-2.png)
@@ -101,149 +99,33 @@ Here is the final result:
 Here is the result as a pie chart:
 
 ![Pie Chart](image-4.png)
-# Interesting Aggregates
-For my aggregates, I decided to group by rating and get the median, max, and standard deviation for calories.
-This allows me to see what type of values of calories each rating consists of. I chose not to include mean because 
-I noticed that the max calories of each rating would not make mean a good indicator of the central value.
 
-|   ('rating', '') |   ('calories (#)', 'median') |   ('calories (#)', 'max') |   ('calories (#)', 'std') |
-|-----------------:|-----------------------------:|--------------------------:|--------------------------:|
-|                1 |                        316   |                   17551.6 |                   757.481 |
-|                2 |                        326.3 |                    7585   |                   526.058 |
-|                3 |                        309.6 |                   13101.5 |                   547.385 |
-|                4 |                        302   |                   16894.9 |                   487.187 |
-|                5 |                        298.2 |                   45609   |                   580.018 |
+# Feature Engineering
+For more useful and insightful clusters, I did more feature engineering.
 
-# Assessment of Missingness
-## NMAR Analysis
-In my dataframe, the three columns that have a significant amount of missing values are description, rating, and review. I believe that the missingness of review is NMAR because the probability of the data being missing is tied 
-to the value itself as people who experience positive or negative feelings with the recipe are more likely to 
-write a review.
+## Category Features
+These are features based on the category of the products customers bought.
 
-## Missingness Dependency
-I wanted to see if the missingness of ratings depended on calories 
+I created a column called Category_Diversity which consists of the unique amount of different categories customers bought. This value represents how much each customer branches out to different categories. I created another column called Favorite_Category, which consists of the category that the customer buys products from the most.
 
-Null Hypothesis: The missingness of rating does not depend on calories.
+## Return Features
+These are features based on the returns of customers.
 
-Alternate Hypothesis: The missingness of rating does depend on calories.
+I created Total_Return, which is the total amount of returns a customer has returned. I also created Return_Rate, which is the rate of return of customers.
 
-Test Statistic: Absolute difference of average calories
+## Behavioral Features
+These are features that pertain to a customer's buying habits.
 
-Level of Signficance: 0.05
+Using the purchase date, I found the favorite hour of each customer by finding the hour that the customer made the most purchases in. Similarly, using the same technique, I found the customer's favorite day of the week.
 
-I ran a permutation test by shuffling the calories 500 times and each time I collected the absolute difference in the average calories of the groups: missing ratings and not missing ratings.
+## Spending Trends
+Using the purchase date, I found each customer's favorite season by finding the month the customer made the most transactions in.
 
-<iframe
-  src="assets/calories-missing.html"
-  width="800"
-  height="600"
-  frameborder="0"
-></iframe>
+This is the final result of my dataframe after feature engineering:
 
-I calculated an observed statistic of 68.98 and a p-value of 0.0, which is less than the level of significance of 
-0.05. This means that we reject the null hypothesis and it suggests that the missingness of rating does depend on calories.
+|   Customer_ID |   Purchase_Date |   Total_Transactions |   Total_Purchase_Amount |   Total_Products |   Average_Transaction |   Average_Quantity_Per_Transaction |   Age | Gender   |   Category_Diversity | Favorite_Category   |   Total_Return |   Return_Rate |   Favorite_Hour |   Favorite_Day | Favorite_Season   |
+|--------------:|----------------:|---------------------:|------------------------:|-----------------:|----------------------:|-----------------------------------:|------:|:---------|---------------------:|:--------------------|---------------:|--------------:|----------------:|---------------:|:------------------|
+|             1 |             397 |                    3 |                    6290 |               15 |               2096.67 |                                  5 |    67 | Female   |                    3 | Books               |              1 |     0.0666667 |               6 |              1 | Spring            |
 
-# Hypothesis Testing
-I conducted my hypothesis testing based on whether people rated low caloric recipes (recipes less than 500 calories) higher than high caloric recipes.
-
-Null Hypothesis: The rating of high caloric recipes and low caloric recipes have the same distribution.
-
-Alternate Hypothesis: The rating of low caloric recipes is greater than the rating of high caloric recipes.
-
-Test Statistic: Difference in mean rating between low caloric and high caloric recipes
-
-Level of Significance: 0.05
-
-When conducting the hypothesis test, I used a permutation test because I wanted to see if the ratings of high caloric recipes and low caloric recipes were rated the same. I was curious on whether low caloric recipes would 
-receive a higher average rating than high caloric recipes.
-
-To perform my hypothesis test, I shuffled the rating 500 times and calculated the difference in the average rating 
-of low caloric recipes and high caloric recipes each time. I then calculated the observed difference, which was 
-0.017. This tells me that low caloric recipes in my sample were rated slightly higher than high caloric recipes. When I found the p_value, the value was 0.0. This causes us to reject the null hypothesis.
-
-<iframe
-  src="assets/highcalories-test.html"
-  width="800"
-  height="600"
-  frameborder="0"
-></iframe>
-
-
-# Framing a Prediction Problem
-For my prediction problem, I wanted to use regression to predict the amount of calories a recipe would have.
-I chose to predict the amount of calories because calories are essential for people who have certain dietary needs 
-or personal fitness goals they want to achieve.
-
-Since I planned on using regression, I chose to use root mean squared error to evaluate my model because I thought 
-it was more interpretable in the context of my problem as I can tell the average error my predicted calories was 
-to the actual calories. My other option was using R^2^, but I felt like knowing the quality of my prediction line 
-wasn't as meaningful.
-
-At the time of the prediction, we wouldn't have access to the nutritional values. We would only have access to 
-information about the recipe such as the number of steps, minutes take to prepare, etc.
-
-# Baseline Model
-For my baseline model, I used a linear regression model that uses three features: is_dessert (nominal), is_dietary (nominal), and minutes (quantitative). is_dessert and is_dietary are both nominal columns extracted from the tags column, which consists of 
-True and False values. For my model I used one hot encoding for these columns and used the standardized version 
-of minutes.
-
-For testing of my model, I split my sample into training and testing sets. With this method, I calculated a 
-root mean squared error of 586 for my training set and 568 for my testing set. I believe this model is terrible 
-because for each recipe, its prediction is more than 500 calories away.
-
-# Final Model
-For my final model, I added several columns: average_rating, is_vegetarian, n_ingredients, and meal_time
-
-## n_ingredients
-I added n_ingredients because as I was doing bivariate analysis, I grouped n_ingredients and aggregated on calories and saw that at some point as the number of steps increased, the median calories was consistently high. I thought 
-that this could be useful to predict calories.
-
-## is_vegetarian
-For this column I extracted if recipes had vegetarian within its tags. Recipes were given the values True or False, which I then one hot encoded. I believed that this feature would improve my model because recipes labeled with vegetarian should have lower calories compared to ones that aren't.
-
-## meal_time
-For this column I extracted if the tags had breakfast, dinner, etc. within it and made it into a column so I could
-use one hot encoding within it. I believed this feature would improve 
-
-The modeling algorithm I chose was Lasso with hyperparameters of alpha = 100 and fit_intercept = True as it performed slightly better on the testing set. To find the best hyperparameters, I used GridSearchCV with a 
-5-fold cross-validation to find the best alpha and fit_intercept parameters.
-
-## Results
-My final model performed slightly better than my baseline model with my final model having a root mean squared error 
-of 558.74 on the testing set compared to my baseline model's root mean squared error of 565.26. My final thoughts about my model was that it was extremely difficult trying to improve my linear regression model to predict 
-calories. I believe that a linear regression model was too simple to predict calories, which led to high bias and 
-high root mean squared error.
-
-# Fairness Analysis
-For my fairness analysis, I wanted to evaluate my model's root mean squared error parity. To do this, I wanted to 
-see if it predicted both high caloric recipes and low caloric recipes the same. 
-
-Null Hypothesis: The model is fair. Its RMSE for high caloric recipes and low caloric recipes are roughly the same.
-
-Alternative Hypothesis: The model is unfair. Its RMSE for high caloric recipes is not the same for low caloric recipes.
-
-Test Statistic: The absolute difference in Root mean Squared Error for the two groups
-
-Significance Level: 0.05 
-
-p-value: 0.00
-
-Conclusion: For my fairness analysis, I observed a p value of 0.00, which causes me to reject the null hypothesis.
-
-<iframe
-  src="assets/fairness-dist.html"
-  width="800"
-  height="600"
-  frameborder="0"
-></iframe>
-
-
-
-
-
-
-
-
-
-
+# Identifying Outliers
 
