@@ -167,21 +167,21 @@ Multicollinearity is important for our clusters because if there is multicolline
 
  Here we can see the graph of the explained variance which shows how much of the variance is obtained by each principal component. I chose 7 as the number of components as this is the point where the cumulative variance slows down.
 
- # Utilizing PCA
+# Utilizing PCA
  After running PCA with 7 components this is the result:
 
  ![PCA Results](./assets/image-8.png)
 
  The highlighted cells are the coefficients that correspond to each principal component.
 
- # Determining Optimal Number of Components
+# Determining Optimal Number of Components
 
- ## Elbow Method
+## Elbow Method
  The Elbow Method is a technique used to find the optimal number of clusters by generating clusters for different values of k and calculating the sum of squared difference of each point and the closest centroid. If we plot the sum of squared differences we can identify the point where adding more clusters does not significantly reduce the sum of squared difference, creating an "elbow". However, the downside of this method is that the "elbow" is usually vague and hard to identify.
 
  ![elbow method](./assets/image-9.png)
 
- ## Utilizing the Silhouette Method
+## Utilizing the Silhouette Method
  The silhouette method is another technique used to find the optimal number of clusters in a dataset. This method calculates a silhouette score for each data point that measure how well each point is assigned to a cluster.
 
  To use the silhouette method you have to choose a range of clusters, then use the resulting cluster as a parameter for the silhouette score.
@@ -192,15 +192,15 @@ Multicollinearity is important for our clusters because if there is multicolline
 
  ![silhouette method](./assets/image-10.png)
 
- ## Interpreting the Silhouette Visualization
+## Interpreting the Silhouette Visualization
  To determine the most optimal amount of clusters I looked at the number of clusters with the highest mean silhouette score and looking at the silhouette plots that are roughly the same thickness and width.  
 
- # Creating the Clusters
+# Creating the Clusters
  After performing clustering, here is the result of the distribution of the customers amongst the clusters.
 
  ![cluster distribution](./assets/image-11.png)
 
- ## Evaluating Cluster Quality
+## Evaluating Cluster Quality
  To evaluate my clusters I'm going to use the Silhouette Score (higher values indicate better clustering), Calinski Harabasz Score (high score indicates better clustering), and Davies Bouldin Score (lower value indicates better clustering).
 
  Here is the evaluation of my clusters:
